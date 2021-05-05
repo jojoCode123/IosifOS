@@ -4,10 +4,10 @@
 #include "lib/memory.hpp"
 #include "util/util.hpp"
 
-#define TTY_WARNING make_attr(ATTR_WHITE, ATTR_RED, true)
-#define TTY_NORMAL make_attr(ATTR_WHITE, ATTR_BLACK, false)
-#define TTY_ERROR make_attr(ATTR_LIGHT_RED, ATTR_BLACK, false)
-#define TTY_SUCCESS make_attr(ATTR_LIGHT_GREEN, ATTR_BLACK, false)
+#define TTY_WARNING TTY::make_attr(ATTR_WHITE, ATTR_RED, true)
+#define TTY_NORMAL TTY::make_attr(ATTR_WHITE, ATTR_BLACK, false)
+#define TTY_ERROR TTY::make_attr(ATTR_LIGHT_RED, ATTR_BLACK, false)
+#define TTY_SUCCESS TTY::make_attr(ATTR_LIGHT_GREEN, ATTR_BLACK, false)
 
 using namespace VideoDriver;
 
@@ -23,7 +23,7 @@ namespace TTY
     };
 
     // The default character attribute
-    uint8 default_char_attr;
+    extern uint8 default_char_attr;
 
     // Print a character at a specific position
     void print_char_at(char chr, uint8 attr, S_cursor_position position);

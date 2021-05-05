@@ -1,0 +1,72 @@
+#include "cpu/idt.hpp"
+
+namespace IDT
+{
+    S_idt_entry make_idt_entry(uint8 interrupt, void *handler, uint8 selector, uint8 type)
+    {
+        S_idt_entry idt_entry;
+
+        idt_entry.offset0_15 = (uint16)((uint32)handler & 0xffff);
+        idt_entry.offset16_31 = (uint16)SHR((uint32)handler & 0xffff0000, 16);
+        idt_entry.selector = selector;
+        idt_entry.type = type;
+        idt_entry.zero = 0;
+
+        return idt_entry;
+    }
+
+    void default_handler()
+    {
+        ISR_ENTRY_STUB;
+        RESET_PIC;
+        ISR_EXIT_STUB;
+    }
+
+    void init_idt()
+    {
+        S_idt_desc idt_desc;
+
+        init_pic(0x20, 0x28);
+        for(uint32 i = 0; i < 256; i++)
+        {
+            GIDT[i] = make_idt_entry(i, (uint32*)default_handler, 0x08, 0x8e);
+        }
+        idt_desc.location = (uint32)GIDT;
+        idt_desc.size = 256 * sizeof(S_idt_entry);
+        load_idt(&idt_desc);
+
+        return;
+    }
+
+    void init_pic(uint8 master_pic_offset, uint8 slave_pic_offset)
+    {
+        uint8 pic1 = port_in<uint8>(0x21);
+        uint8 pic2 = port_in<uint8>(0xa1);
+
+        port_out<uint8>(0x21, 0xfd);
+        port_out<uint8>(0xa1, 0xff);
+
+        port_out<uint8>(0x20, 0x11);
+        port_out<uint8>(0xa0, 0x11);
+        port_out<uint8>(0x21, master_pic_offset);
+        port_out<uint8>(0xa1, slave_pic_offset);
+        port_out<uint8>(0x21, 0x04);
+        port_out<uint8>(0xa1, 0x02);
+        port_out<uint8>(0x21, 0x01);
+        port_out<uint8>(0xa1, 0x01);
+
+        port_out<uint8>(0x21, pic1);
+        port_out<uint8>(0xa1, pic2);
+
+        return;
+    }
+
+    void load_idt(PS_idt_desc idt_desc)
+    {
+        CLEAR_INTERRUPTS;
+        __asm__("lidt (%%eax)" :: "a"(idt_desc));
+        ENABLE_INTERRUPTS;
+
+        return;
+    }
+}

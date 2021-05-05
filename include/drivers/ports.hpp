@@ -1,3 +1,5 @@
+#pragma once
+
 #include "util/types.hpp"
 
 // Write data to a port

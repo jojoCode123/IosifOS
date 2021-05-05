@@ -2,6 +2,8 @@
 
 namespace TTY
 {
+    uint8 default_char_attr;
+
     void print_char_at(char chr, uint8 attr, S_cursor_position position)
     {
         uint16 offset;
@@ -9,7 +11,7 @@ namespace TTY
 
         set_cursor_position(position);
         offset = position_to_offset(position);
-        value = (ushort)SHL(chr, 8) + (ushort)attr;
+        value = (ushort)SHL(attr, 8) + (ushort)chr;
         P_VIDEO_MEMORY[offset] = value;
 
         move_cursor(RIGHT);
