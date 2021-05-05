@@ -21,13 +21,11 @@ all: $(TARGET)
 	find ./ -type f -name "*.o" -delete
 
 $(TARGET): $(OBJECTS)
-		$(CXX) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 
-# You don't even need to be explicit here,
-# compiling C files is handled automagically by Make.
 %.o: %.cpp
-		$(CXX) $(FLAGS) -c $^ -o $@
+	$(CXX) $(FLAGS) -c $^ -o $@
 
 %.o: %.asm
 	$(NASM) $(NASMFLAGS) -o $@ $^
