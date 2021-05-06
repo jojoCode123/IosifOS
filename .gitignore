@@ -1,2 +1,4 @@
 *.o
 *.bin
+copy.sh
+start

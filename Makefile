@@ -18,6 +18,7 @@ OBJECTS = $(foreach x, $(basename $(SOURCES)), $(x).o)
 all: $(TARGET)
 	cp iosifos.bin isodir/boot/iosifos.bin
 	grub-mkrescue -o bin/IosifOS.iso isodir
+	cp bin/IosifOS.iso /mnt/c/Users/Joseph/Documents/IosifOS/IosifOS.iso
 	find ./ -type f -name "*.o" -delete
 
 $(TARGET): $(OBJECTS)

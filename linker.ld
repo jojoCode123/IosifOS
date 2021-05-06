@@ -12,6 +12,9 @@ SECTIONS
         GGDT = .;
         . += 4K;
     }
+
+    . = 1M;
+
     .MULTIBOOT BLOCK(0x1000):
     {
         *(.multiboot)
@@ -20,6 +23,7 @@ SECTIONS
     {
         *(.text)
     }
+
     .RODATA BLOCK(0x1000):
     {
         *(.rodata)
@@ -37,5 +41,12 @@ SECTIONS
         _stack_bottom = .;
         . += 16K;
         _stack_top = .;
+    }
+
+    . = 0x200000;
+    .HEAP BLOCK(0x1000):
+    {
+        HEAP = .;
+        . += 1M;
     }
 }
