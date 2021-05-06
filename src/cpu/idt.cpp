@@ -6,8 +6,8 @@ namespace IDT
     {
         S_idt_entry idt_entry;
 
-        idt_entry.offset0_15 = (uint16)((uint32)default_handler & 0xffff);
-        idt_entry.offset16_31 = (uint16)SHR((uint32)default_handler & 0xffff0000, 16);
+        idt_entry.offset0_15 = (uint16)((uint32)handler & 0xffff);
+        idt_entry.offset16_31 = (uint16)SHR((uint32)handler & 0xffff0000, 16);
         idt_entry.selector = selector;
         idt_entry.type = type;
         idt_entry.zero = 0;
