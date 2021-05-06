@@ -53,7 +53,7 @@ namespace TTY
         return;
     }
 
-    void print_str_at(STRING string, uint8 attr, S_cursor_position position)
+    void print_str_at(const char *string, uint8 attr, S_cursor_position position)
     {
         set_cursor_position(position);
         for(uint32 i = 0; string[i] != 0; i++)
@@ -64,7 +64,7 @@ namespace TTY
         return;
     }
 
-    void print_str(STRING string, uint8 attr)
+    void print_str(const char *string, uint8 attr)
     {
         S_cursor_position current_position;
 
@@ -78,9 +78,11 @@ namespace TTY
     {
         S_cursor_position current_position;
 
-        current_position = get_curor_position();
         move_cursor(DOWN);
+        current_position = get_curor_position();
         current_position.column = 0;
+        set_cursor_position(current_position);
+
 
         return;
     }

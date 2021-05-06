@@ -32,10 +32,10 @@ namespace TTY
     void print_char(char chr, uint8 attr);
 
     // Prints a string at a specific position
-    void print_str_at(STRING string, uint8 attr, S_cursor_position position);
+    void print_str_at(const char *string, uint8 attr, S_cursor_position position);
 
     // Prints a string at the current position
-    void print_str(STRING string, uint8 attr);
+    void print_str(const char *string, uint8 attr);
 
     // Print a new line
     void print_nl(uint8 attr);
