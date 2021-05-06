@@ -14,7 +14,9 @@
             "remote": true,
             "cwd": "${workspaceRoot}", 
             "gdbpath": "/usr/bin/gdb",
-            "preLaunchTask":"Run"
+            "preLaunchTask":"Build",
+            "autorun": [
+            ]
         }
     ]
 

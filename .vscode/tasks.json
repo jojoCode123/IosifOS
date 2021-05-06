@@ -13,18 +13,15 @@
         },
         {
             "label": "Launch QEMU",
+            "dependsOn":"Build",
             "type": "shell",
+            "windows":{
+                "command": "'C:/Program Files/qemu/qemu-system-i386' -cdrom \\\\wsl$\\Ubuntu-20.04\\home\\joseph\\IosifOS\\bin\\IosifOS.bin -S -gdb tcp::1234"
+            },
             "linux":{
                 "command": "qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom bin/IosifOS.iso -nographic"
             },
             "problemMatcher":"$gcc"
-        },
-        {
-            "label": "Run",
-            "dependsOn":[
-                "Build",
-                "Launch QEMU"
-            ]
         }
     ]
 }
