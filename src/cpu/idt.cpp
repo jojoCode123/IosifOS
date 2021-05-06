@@ -6,8 +6,8 @@ namespace IDT
     {
         S_idt_entry idt_entry;
 
-        idt_entry.offset0_15 = (uint16)((uint32)handler & 0xffff);
-        idt_entry.offset16_31 = (uint16)SHR((uint32)handler & 0xffff0000, 16);
+        idt_entry.offset0_15 = (uint16)((uint32)default_handler & 0xffff);
+        idt_entry.offset16_31 = (uint16)SHR((uint32)default_handler & 0xffff0000, 16);
         idt_entry.selector = selector;
         idt_entry.type = type;
         idt_entry.zero = 0;
@@ -33,6 +33,8 @@ namespace IDT
         }
         idt_desc.location = (uint32)GIDT;
         idt_desc.size = 256 * sizeof(S_idt_entry);
+
+        GIDT[1] = make_idt_entry(1, (uint32 *)isr0, 0x08, 0x8e);
         load_idt(&idt_desc);
 
         return;
@@ -68,5 +70,14 @@ namespace IDT
         ENABLE_INTERRUPTS;
 
         return;
+    }
+    
+
+    void isr0()
+    {
+        ISR_ENTRY_STUB;
+        TTY::print_str("int 0\n", TTY_SUCCESS);
+        RESET_PIC;
+        ISR_EXIT_STUB;
     }
 }

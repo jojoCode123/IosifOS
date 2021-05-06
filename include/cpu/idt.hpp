@@ -4,6 +4,7 @@
 #include "util/util.hpp"
 #include "drivers/ports.hpp"
 #include "cpu/general.hpp"
+#include "lib/tty.hpp"
 
 #define ISR_ENTRY_STUB __asm__("pusha")
 #define ISR_EXIT_STUB __asm__("popa\n iret")
@@ -46,4 +47,7 @@ namespace IDT
 
     // Load the idt
     void load_idt(PS_idt_desc idt_desc);
+
+    // Int 0
+    void isr0();
 }

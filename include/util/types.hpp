@@ -14,4 +14,4 @@ typedef signed int sint, sint32;
 
 typedef long long size_t;
 
-typedef const char (*STRING);
+typedef char (*STRING);

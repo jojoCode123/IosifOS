@@ -22,7 +22,8 @@ namespace GDT
         null_access.RW = 0;
         null_access.S = 0;
 
-        null_segment.access = null_access;
+        //null_segment.access = null_access;
+        null_segment.access = 0;
         null_segment.base0_7 = 0;
         null_segment.base16_23 = 0;
         null_segment.base24_31 = 0;
@@ -40,7 +41,8 @@ namespace GDT
         code_access.RW = 0;
         code_access.S = 1;
 
-        code_segment.access = code_access;
+        // code_segment.access = code_access;
+        code_segment.access = 0x98;
         code_segment.base0_7 = 0;
         code_segment.base16_23 = 0;
         code_segment.base24_31 = 0;
@@ -58,7 +60,8 @@ namespace GDT
         data_access.RW = 1;
         data_access.S = 1;
 
-        data_segment.access = data_access;
+        // data_segment.access = data_access;
+        data_segment.access = 0x92;
         data_segment.base0_7 = 0;
         data_segment.base16_23 = 0;
         data_segment.base24_31 = 0;
@@ -87,17 +90,24 @@ namespace GDT
 
         uint32 p = (uint32)(&gdt_desc);
 
-        __asm__ __volatile__("lgdt (%%eax) \n" :: "a"(p));
-        __asm__ __volatile__("movw $0x08, %ax \n"\
-                "movw $0x10, %bx \n"\
-                "mov %ax, %cs \n"\
-                "mov %bx, %ds \n"\
-                "mov %bx, %ss \n"\
-                "mov %bx, %es \n"\
-                "mov %bx, %gs \n"\
-                "mov %bx, %fs \n"\
-                "ljmp $0x08, $next \n"\
-                "next: \n"
+        __asm__ __volatile__(
+            "movw $0x18, (%%eax) \n"\
+            "add $0x2, %%eax \n"
+            "movl $0x1000, (%%eax) \n"\
+            "sub $0x2, %%eax \n"\
+            "cli \n"\
+            "lgdt (%%eax) \n"
+            :: "a"(p));
+
+        __asm__ __volatile__(
+            "ljmp $0x08, $next \n"\
+            "next: \n"
+            "movw $0x10, %bx \n"\
+            "mov %bx, %ds \n"\
+            "mov %bx, %ss \n"\
+            "mov %bx, %es \n"\
+            "mov %bx, %gs \n"\
+            "mov %bx, %fs \n"\
         );
 
         return;
