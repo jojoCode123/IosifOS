@@ -28,9 +28,14 @@ namespace Memory
         {
             PS_block_header header = (PS_block_header)block;
 
-            if(!header->flags.is_free || header->flags.is_last || !header->p_next_header->flags.is_free)
+            if(header->flags.is_last || !header->p_next_header->flags.is_free)
             {
                 return false;
+            }
+
+            if(header->flags.is_first)
+            {
+                header->p_next_header->flags.is_first = 1;
             }
 
             header->flags = header->p_next_header->flags;
@@ -73,7 +78,7 @@ namespace Memory
                 }
                 else
                 {
-                    PS_block_header next_header = (PS_block_header)(header + size + sizeof(S_block_header));
+                    PS_block_header next_header = (PS_block_header)((uint32)header + size + sizeof(S_block_header));
                     if(header->flags.is_last)
                     {
                         next_header->flags.is_last = 1;
@@ -94,7 +99,7 @@ namespace Memory
                     header->size = size;
                     header->flags.is_free = 0;
 
-                    return (void *)(header + sizeof(S_block_header));
+                    return (void *)((uint32)header + sizeof(S_block_header));
                 }
             }
         }
@@ -122,7 +127,7 @@ namespace Memory
         }
         else
         {
-            header->flags.is_free = 0;
+            header->flags.is_free = 1;
             return true;
         }
     }
