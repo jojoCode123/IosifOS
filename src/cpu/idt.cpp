@@ -15,13 +15,6 @@ namespace IDT
         return idt_entry;
     }
 
-    void default_handler()
-    {
-        ISR_ENTRY_STUB;
-        RESET_PIC;
-        ISR_EXIT_STUB;
-    }
-
     void init_idt()
     {
         S_idt_desc idt_desc;
@@ -29,12 +22,13 @@ namespace IDT
         init_pic(0x20, 0x28);
         for(uint32 i = 0; i < 256; i++)
         {
-            GIDT[i] = make_idt_entry(i, (uint32*)default_handler, 0x08, 0x8e);
+            GIDT[i] = make_idt_entry(i, (void *)default_handler_init, 0x08, 0x8e);
         }
         idt_desc.location = (uint32)GIDT;
         idt_desc.size = 256 * sizeof(S_idt_entry);
 
-        GIDT[1] = make_idt_entry(1, (uint32 *)isr0, 0x08, 0x8e);
+        GIDT[0] = make_idt_entry(0, (void *)isr0, 0x08, 0x8e);
+
         load_idt(&idt_desc);
 
         return;
@@ -73,11 +67,19 @@ namespace IDT
     }
     
 
-    void isr0()
+    extern "C" void default_handler()
     {
-        ISR_ENTRY_STUB;
-        TTY::print_str("int 0\n", TTY_SUCCESS);
-        RESET_PIC;
-        ISR_EXIT_STUB;
+        port_out<uint8>(0x20, 0x20);
+        port_out<uint8>(0xa0, 0x20);
+        return;
     }
-}
+
+    extern "C" void isr0_handler()
+    {
+        TTY::print_str("isr0", TTY_NORMAL);
+
+        port_out<uint8>(0x20, 0x20);
+        port_out<uint8>(0xa0, 0x20);
+        return;
+    }
+};

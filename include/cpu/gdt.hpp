@@ -25,8 +25,7 @@ namespace GDT
         uint8 S:1;
         uint8 Privl:2;
         uint8 Pr:1;
-    } S_gdt_access, *PS_gdt_access
-    __attribute__((__packed__));
+    } S_gdt_access, *PS_gdt_access;
 
     // Structure of GDT entry
     typedef struct
@@ -41,8 +40,7 @@ namespace GDT
         uint8 limit16_19:4;
         uint8 flags:4;
         uint8 base24_31;
-    } S_gdt_entry, *PS_gdt_entry
-    __attribute__((__packed__));
+    } S_gdt_entry, *PS_gdt_entry;
 
     
     // Initialise the GDT

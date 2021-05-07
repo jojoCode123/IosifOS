@@ -12,6 +12,12 @@
 
 namespace IDT
 {
+    namespace
+    {
+        extern "C" void default_handler_init();
+        extern "C" void isr0();
+    }
+
     // Structure of an IDT entry
     typedef struct
     {
@@ -20,24 +26,19 @@ namespace IDT
         uint8 zero;
         uint8 type;
         uint8 offset16_31;
-    } S_idt_entry, *PS_idt_entry
-    __attribute__((__packed__));
+    } S_idt_entry, *PS_idt_entry;
 
     typedef struct
     {
         uint16 size;
         uint32 location;
-    } S_idt_desc, *PS_idt_desc
-    __attribute__((__packed__));
+    } S_idt_desc, *PS_idt_desc;
 
     // Global IDT table
     extern "C" S_idt_entry GIDT[256];
 
     // Initialise the IDT
     void init_idt();
-
-    // The default ISR
-    void default_handler();
 
     // Construct an IDT entry
     S_idt_entry make_idt_entry(uint8 interrupt, void *handler, uint8 selector, uint8 type);
@@ -47,7 +48,4 @@ namespace IDT
 
     // Load the idt
     void load_idt(PS_idt_desc idt_desc);
-
-    // Int 0
-    void isr0();
 }
