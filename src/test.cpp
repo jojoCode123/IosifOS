@@ -1,4 +1,0 @@
-void hello()
-{
-	return;
-}

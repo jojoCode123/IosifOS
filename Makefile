@@ -12,7 +12,7 @@ OBJDIR = obj
 TARGET = ./bin/iosifos.bin
 
 SOURCES=$(shell find src -type f -iname '*.*')
-NASMSOURCE = $(shell file src -type f -iname '*.asm')
+#NASMSOURCE = $(shell file src -type f -iname '*.asm')
 OBJECTS = $(foreach x, $(basename $(SOURCES)), $(x).o)
 
 all: $(TARGET)
@@ -33,3 +33,6 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	find ./ -type f -name "*.o" -delete
+
+delete:
+	rm isodir/boot/iosifos.bin

@@ -5,6 +5,7 @@
 #include "drivers/ports.hpp"
 #include "cpu/general.hpp"
 #include "lib/tty.hpp"
+#include "drivers/keyboard.hpp"
 
 #define ISR_ENTRY_STUB __asm__("pusha")
 #define ISR_EXIT_STUB __asm__("popa\n iret")
@@ -15,7 +16,7 @@ namespace IDT
     namespace
     {
         extern "C" void default_handler_init();
-        extern "C" void isr0();
+        extern "C" void isr1();
     }
 
     // Structure of an IDT entry

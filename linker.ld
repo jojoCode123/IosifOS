@@ -43,7 +43,14 @@ SECTIONS
         _stack_top = .;
     }
 
-    . = 0x200000;
+    . = 2M;
+    .BUFFERS BLOCK(0x1000):
+    {
+        KB_INPUT_BUFFER = .;
+        . += 16K;
+    }
+
+    . = 3M;
     .HEAP BLOCK(0x1000):
     {
         HEAP = .;

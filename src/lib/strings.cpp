@@ -2,7 +2,7 @@
 
 namespace Strings
 {
-	STRING strc(STRING source, char *destination)
+	const char *strc(const char *source, char *destination)
 	{
 		uint32 i;
 
@@ -15,7 +15,7 @@ namespace Strings
 		return destination;
 	}
 
-	STRING strc_s(STRING source, char *destination, size_t size)
+	const char *strc_s(const char *source, char *destination, size_t size)
 	{
 		for(uint32 i = 0; i < size; i++)
 		{
@@ -26,7 +26,7 @@ namespace Strings
 		return destination;
 	}
 
-	size_t strl(STRING string)
+	size_t strl(const char *string)
 	{
 		size_t size = 0;
 
@@ -38,7 +38,7 @@ namespace Strings
 		return size;
 	}
 
-	bool strcmp_complete(STRING string1, STRING string2)
+	bool strcmp_complete(const char *string1, const char *string2)
 	{
 		size_t length_string1 = strl(string1);
 		size_t length_string2 = strl(string2);
@@ -58,7 +58,7 @@ namespace Strings
 		return true;
 	}
 
-	bool strcmp_partial(STRING string1, STRING string2, size_t length)
+	bool strcmp_partial(const char *string1, const char *string2, size_t length)
 	{
 		size_t length_string1 = strl(string1);
 		size_t length_string2 = strl(string2);
@@ -79,7 +79,7 @@ namespace Strings
 		return true;
 	}
 
-	uint32 remove_whitespace(STRING string, size_t length = NULL)
+	uint32 remove_whitespace(char *string, size_t length = NULL)
 	{
 		uint32 whitespaces = 0;
 
@@ -134,7 +134,7 @@ namespace Strings
 		return (uint8)digit;
 	}
 
-	STRING byte_to_hex(uint8 byte)
+	const char *byte_to_hex(uint8 byte)
 	{
 		static char output[3];
 		
@@ -145,20 +145,20 @@ namespace Strings
 		output[1] = byte_to_ascii(low);
 		output[2] = 0;
 
-		return (STRING)output;
+		return output;
 	}
 
-	STRING bytes_to_hex(uint8 *bytes, char output[], size_t length)
+	const char *bytes_to_hex(uint8 *bytes, char output[], size_t length)
 	{
 		for(uint32 i = 0; i < length; i++)
 		{
 			strc(byte_to_hex(bytes[i]), &output[2*i]);
 		}
 
-		return (STRING)output;
+		return (const char *)output;
 	}
 
-	uint8 hex_to_byte(STRING hex)
+	uint8 hex_to_byte(const char *hex)
 	{
 		uint8 high = ascii_to_byte(hex[0]);
 		uint8 low = ascii_to_byte(hex[1]);
@@ -166,7 +166,7 @@ namespace Strings
 		return SHL(high, 4) + low;
 	}
 
-	STRING int_to_dec(uint32 value)
+	const char *int_to_dec(uint32 value)
 	{
 		static char output[11];
 
@@ -198,7 +198,7 @@ namespace Strings
 		return output;
 	}
 
-	STRING int_to_hex(uint32 value)
+	const char *int_to_hex(uint32 value)
 	{
 		static char output[9];
 
@@ -229,7 +229,7 @@ namespace Strings
 		return output;
 	}
 
-	uint32 dec_to_int(STRING decimal)
+	uint32 dec_to_int(const char *decimal)
 	{
 		size_t size = strl(decimal);
 		uint32 result = 0;
@@ -243,7 +243,7 @@ namespace Strings
 		return result;
 	}
 
-	uint32 hex_to_int(STRING hex)
+	uint32 hex_to_int(const char *hex)
 	{
 		size_t size = strl(hex);
 		uint32 result = 0;

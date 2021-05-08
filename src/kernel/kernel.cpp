@@ -1,25 +1,50 @@
 #include "kernel/kernel.hpp"
 
-extern "C" void kernel_main()
+void initialise_stuff()
 {
-	TTY::default_char_attr = TTY_NORMAL;
-	TTY::print_str("Welcome to IosifOS", TTY_NORMAL);
-	TTY::print_nl(TTY_NORMAL);
-
 	GDT::init_gdt();
 	IDT::init_idt();
 	Memory::init_heap();
 
-	char *test_memory = (char *)Memory::malloc(32);
-	for(uint32 i = 0; i < 32; i++)
+	return;
+}
+
+extern "C" void kernel_main()
+{
+	initialise_stuff();
+
+	TTY::default_char_attr = TTY_NORMAL;
+
+	TTY::print_str("Welcome to IosifOS!\n", TTY_NORMAL);
+
+	char input[500];
+
+	const char *help_menu = "\nIosifOS help manual:\n\n"
+	"\thelp - print this help screen\n"
+	"\tclear - clear the screen\n"
+	"\n";
+
+	const char *error_msg = "Invalid command re.\nType \"help\" for help.\n";
+
+	while(true)
 	{
-		test_memory[i] = 'a';
+		TTY::print_str("iosifshell> ");
+		Keyboard::read(input, 500, '\n');
+		if(Strings::strcmp_complete("clear", input))
+		{
+			TTY::clear_screen(true);
+		}
+		else if(Strings::strcmp_complete("help", input))
+		{
+			TTY::print_str(help_menu);
+		}
+		else if(Strings::strcmp_complete("\n", input))
+		{
+			continue;
+		}
+		else
+		{
+			TTY::print_str(error_msg, TTY_WARNING);
+		}
 	}
-	test_memory[31] = 0;
-
-	TTY::print_str(test_memory, TTY_SUCCESS);
-	TTY::print_nl(TTY_WARNING);
-	TTY::print_str(Strings::int_to_dec(Strings::strl(test_memory)), TTY_SUCCESS);
-
-	Memory::free(test_memory);
 }

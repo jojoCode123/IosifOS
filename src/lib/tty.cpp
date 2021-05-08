@@ -4,10 +4,15 @@ namespace TTY
 {
     uint8 default_char_attr;
 
-    void print_char_at(char chr, uint8 attr, S_cursor_position position)
+    void print_char_at(char chr, S_cursor_position position, uint8 attr)
     {
         uint16 offset;
         ushort value;
+
+        if(!attr)
+        {
+            attr = default_char_attr;
+        }
 
         set_cursor_position(position);
         offset = position_to_offset(position);
@@ -22,7 +27,7 @@ namespace TTY
     void print_char(char chr, uint8 attr)
     {
         S_cursor_position current_position;
-
+        
         current_position = get_curor_position();
         
         if(chr == '\n')
@@ -47,13 +52,13 @@ namespace TTY
         }
         else
         {
-            print_char_at(chr, attr, current_position);
+            print_char_at(chr, current_position, attr);
         }
 
         return;
     }
 
-    void print_str_at(const char *string, uint8 attr, S_cursor_position position)
+    void print_str_at(const char *string, S_cursor_position position, uint8 attr)
     {
         set_cursor_position(position);
         for(uint32 i = 0; string[i] != 0; i++)
@@ -69,7 +74,7 @@ namespace TTY
         S_cursor_position current_position;
 
         current_position = get_curor_position();
-        print_str_at(string, attr, current_position);
+        print_str_at(string, current_position, attr);
 
         return;
     }
@@ -83,14 +88,13 @@ namespace TTY
         current_position.column = 0;
         set_cursor_position(current_position);
 
-
         return;
     }
 
     void print_backspace(uint8 attr)
     {
         move_cursor(LEFT);
-        print_char_at(' ', attr, get_curor_position());
+        print_char_at(' ', get_curor_position(), attr);
         move_cursor(LEFT);
 
         return;
@@ -129,7 +133,7 @@ namespace TTY
                 {
                     if(current_position.row == VIDEO_HEIGHT - 1)
                     {
-                        scroll(default_char_attr);
+                        scroll(1);
                         current_position.row = VIDEO_HEIGHT - 1;
                         current_position.column = 0;
                     }
@@ -150,7 +154,7 @@ namespace TTY
             case DOWN:
                 if(current_position.row == VIDEO_HEIGHT - 1)
                 {
-                    scroll(default_char_attr);
+                    scroll(1);
                     return;
                 }
                 else
@@ -176,7 +180,7 @@ namespace TTY
         }
     }
 
-    void clear_screen(uint8 attr, bool set_to_beginning)
+    void clear_screen(bool set_to_beginning, uint8 attr)
     {
         char chr;
         ushort value;
@@ -188,7 +192,7 @@ namespace TTY
         }
 
         chr = ' ';
-        value = (ushort)SHL(chr, 8) + (ushort)attr;
+        value = (ushort)SHL(attr, 8) + (ushort)chr;
 
         Memory::mems<ushort>((ushort *)P_VIDEO_MEMORY, value, VIDEO_HEIGHT * VIDEO_WIDTH);
 
@@ -210,7 +214,7 @@ namespace TTY
 
         attr = default_char_attr;
         chr = ' ';
-        value = (ushort)SHL(chr, 8) + (ushort)attr;
+        value = (ushort)SHL(attr, 8) + (ushort)chr;
 
         Memory::memc<ushort>(&P_VIDEO_MEMORY[lines*VIDEO_WIDTH], P_VIDEO_MEMORY, VIDEO_SIZE - lines*VIDEO_WIDTH);
         Memory::mems<ushort>(&P_VIDEO_MEMORY[VIDEO_SIZE - lines*VIDEO_WIDTH], value, lines*VIDEO_WIDTH);

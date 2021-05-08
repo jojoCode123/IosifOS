@@ -26,28 +26,28 @@ namespace TTY
     extern uint8 default_char_attr;
 
     // Print a character at a specific position
-    void print_char_at(char chr, uint8 attr, S_cursor_position position);
+    void print_char_at(char chr, S_cursor_position position, uint8 attr = NULL);
 
     // Print a character at the current position
     void print_char(char chr, uint8 attr);
 
     // Prints a string at a specific position
-    void print_str_at(const char *string, uint8 attr, S_cursor_position position);
+    void print_str_at(const char *string, S_cursor_position position, uint8 attr = NULL);
 
     // Prints a string at the current position
-    void print_str(const char *string, uint8 attr);
+    void print_str(const char *string, uint8 attr = NULL);
 
     // Print a new line
-    void print_nl(uint8 attr);
+    void print_nl(uint8 attr = NULL);
 
     // Print a backspace
-    void print_backspace(uint8 attr);
+    void print_backspace(uint8 attr = NULL);
 
     // Move the cursor
     void move_cursor(E_move_direction direction);
 
     // Clear the sreen
-    void clear_screen(uint8 attr, bool set_to_beginning);
+    void clear_screen(bool set_to_beginning, uint8 attr = NULL);
 
     // Scroll the screen X lines
     void scroll(uint8 lines);

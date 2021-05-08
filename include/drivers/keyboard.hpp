@@ -39,3 +39,41 @@
 #define KB_SET_SCANCODE_SET_1 0x01
 #define KB_SET_SCANCODE_SET_2 0x02
 #define KB_SET_SCANCODE_SET_3 0x03
+
+namespace Keyboard
+{
+    const char codes[]
+    {
+    0x00, 0x01, '1', '2', '3',
+    '4', '5', '6', '7',
+    '8', '9', '0', '-',
+    '=', '\b', '\t', 'q',
+    'w', 'e', 'r', 't',
+    'y', 'u', 'i', 'o',
+    'p', '[', ']', '\n',
+    0x1d,
+    'a', 's', 'd', 'f',
+    'g', 'h', 'j', 'k',
+    'l', ';', '\'', '`',
+    0x2a, '\\', 'z', 'x',
+    'c', 'v', 'b', 'n',
+    'm', ',', '.', '/',
+    0x36, '*', 0x38, ' ',
+    0x3a
+    };
+
+    extern "C" char KB_INPUT_BUFFER[];
+    static uint32 input_buffer_pointer;
+
+    // Default callback function for keyboard interrupt
+    void keyboard_callback();
+
+    // Reads max X bytes, or until delimiter is reached,
+    // from input buffer.
+    // Removes the read data from the buffer and copies any
+    // remaining data to the beginning
+    // Returns bytes read
+    size_t read(char buffer[], size_t size, char delimiter);
+
+    void toggle_caps_lock();
+}

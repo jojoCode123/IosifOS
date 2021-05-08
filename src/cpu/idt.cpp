@@ -27,7 +27,7 @@ namespace IDT
         idt_desc.location = (uint32)GIDT;
         idt_desc.size = 256 * sizeof(S_idt_entry);
 
-        GIDT[0] = make_idt_entry(0, (void *)isr0, 0x08, 0x8e);
+        GIDT[33] = make_idt_entry(33, (void *)isr1, 0x08, 0x8e);
 
         load_idt(&idt_desc);
 
@@ -74,10 +74,9 @@ namespace IDT
         return;
     }
 
-    extern "C" void isr0_handler()
+    extern "C" void isr1_handler()
     {
-        TTY::print_str("isr0", TTY_NORMAL);
-
+        Keyboard::keyboard_callback();
         port_out<uint8>(0x20, 0x20);
         port_out<uint8>(0xa0, 0x20);
         return;

@@ -1,8 +1,8 @@
 global default_handler_init
 extern default_handler
 
-global isr0
-extern isr0_handler
+global isr1
+extern isr1_handler
 
 default_handler_init:
     pusha
@@ -10,8 +10,8 @@ default_handler_init:
     popa
     iret
 
-isr0:
+isr1:
     pusha
-    call isr0_handler
+    call isr1_handler
     popa
     iret
